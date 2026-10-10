@@ -109,8 +109,8 @@
             let data = await res.json()
 
             document.querySelector(".users-list").innerHTML = `
-                ${data.map((user) => {
-                    return `<li>${user.id} - ${user.first_name}</li>`
+                ${data.map((user, ind) => {
+                    return `<li>${ind+1}: ${user.firstName} - ${user.email}</li>`
                 }).join("")}`
         }
 

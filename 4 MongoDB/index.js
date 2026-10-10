@@ -40,22 +40,24 @@ const Users = mongoose.model("users", userSchema)
 
 
 // Middlewares
+app.use(express.json())
 app.use(express.urlencoded({ extended:false }))
 app.use(express.static("public"))
 
 
 // Routes that returns JSON format data
-app.get("/api/users", (req, res) => {
+app.get("/api/users", async (req, res) => {
     // Return all the users from MongoDB
     console.log("Sending user's data from MongoDB...")
-    return res.json(Users.find({}))
+    const users = await Users.find({})
+    return res.json(users)
 })
 
 app.route("/api/users/:id")
     // Return user with id
-    .get( (req, res) => {
-        let id = Number (req.params.id)
-        let user = users.find(user => user.id === id)
+    .get(async (req, res) => {
+        let id = req.params.id
+        let user = await Users.findById(id)
 
         if (user) {
             res.json(user)
@@ -64,21 +66,36 @@ app.route("/api/users/:id")
         }
     })
     // Edit user with id
-    .patch((req, res) => {
-        let id = Number (req.params.id)
+    .patch(async (req, res) => {
+        let id = req.params.id
         let data_body = req.body
-        let user = users.find(u => u.id === id)
+
+        if (!data_body.first_name &&
+        !data_body.last_name &&
+        !data_body.email &&
+        !data_body.gender &&
+        !data_body.job_title) {
+            return res.status(400).json({error : "Please provide the detials to update"})
+        }
+        
+        let user = await Users.findById(id)
+
         if (user) {
-            Object.assign(user, { id }, data_body) // Updating the user with new data from frontend in data_body
-            fs.writeFile(fileName, JSON.stringify(users), (err, data) => {
-                if (err) {
-                    console.error("File write error:", err);
-                    return res.status(500).json({ "Status": "Failed to write file", error: err.message });
-                }
-                return res.json({"Status" : "Successfully updated user", id})
+            const updatedUser = await Users.findByIdAndUpdate(id, {
+                firstName: data_body.first_name,
+                lastName: data_body.last_name,
+                email: data_body.email,
+                gender: data_body.gender,
+                jobTitle: data_body.job_title
             })
+
+            if (updatedUser) 
+                return res.json({"Status" : "Successfully updated user", id})
+            else 
+                return res.json({"Status" : "Failed to update user", id})
+
         } else {
-            res.json({"Status" : "Failed to update user", id})
+            return res.json({"Status" : "User not found, cannot update the user", id})
         }
     })
     // Delete user with id
@@ -126,8 +143,6 @@ app.post("/api/users", async (req, res) => {
         gender: data_body.gender,
         jobTitle: data_body.job_title
     })
-
-    console.log(result)
 
     res.json({
         msg: "Successfuly added new user", 
