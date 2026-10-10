@@ -1,5 +1,4 @@
 const express = require("express")
-const fs = require("fs")
 const path = require("path")
 const mongoose = require('mongoose');
 
@@ -49,20 +48,33 @@ app.use(express.static("public"))
 app.get("/api/users", async (req, res) => {
     // Return all the users from MongoDB
     console.log("Sending user's data from MongoDB...")
-    const users = await Users.find({})
-    return res.json(users)
+    try {
+        const users = await Users.find({}) // MongoDB
+        
+        if (users) {
+            return res.json(users)
+        }
+        return res.status(404).json({"Status": "Not found users in DB"})
+    } catch(err) {
+        return res.status(401).json({"Status": "Cann't able to Get users", "error": err})
+    }
 })
 
 app.route("/api/users/:id")
     // Return user with id
     .get(async (req, res) => {
         let id = req.params.id
-        let user = await Users.findById(id)
-
-        if (user) {
-            res.json(user)
-        } else {
-            res.json({"Status" : "User doesn't exist", id})
+        
+        try {
+            let user = await Users.findById(id) // MongoDB
+            
+            if (user) {
+                res.json(user)
+            } else {
+                res.json({"Status" : "User doesn't exist", id})
+            }
+        } catch(err) {
+            return res.json({id, "Status": "Cann't able to get user", "error": err})
         }
     })
     // Edit user with id
@@ -71,51 +83,50 @@ app.route("/api/users/:id")
         let data_body = req.body
 
         if (!data_body.first_name &&
-        !data_body.last_name &&
-        !data_body.email &&
-        !data_body.gender &&
-        !data_body.job_title) {
-            return res.status(400).json({error : "Please provide the detials to update"})
-        }
+            !data_body.last_name &&
+            !data_body.email &&
+            !data_body.gender &&
+            !data_body.job_title) {
+                return res.status(400).json({error : "Please provide the detials to update"})
+            }
         
-        let user = await Users.findById(id)
+        try {
+            let user = await Users.findById(id) // MongoDB
 
-        if (user) {
-            const updatedUser = await Users.findByIdAndUpdate(id, {
-                firstName: data_body.first_name,
-                lastName: data_body.last_name,
-                email: data_body.email,
-                gender: data_body.gender,
-                jobTitle: data_body.job_title
-            })
+            if (user) {
+                const updatedUser = await Users.findByIdAndUpdate(id, {
+                    firstName: data_body.first_name,
+                    lastName: data_body.last_name,
+                    email: data_body.email,
+                    gender: data_body.gender,
+                    jobTitle: data_body.job_title
+                }) // MongoDB
 
-            if (updatedUser) 
-                return res.json({"Status" : "Successfully updated user", id})
-            else 
-                return res.json({"Status" : "Failed to update user", id})
+                if (updatedUser) 
+                    return res.json({"Status" : "Successfully updated user", id})
+                else 
+                    return res.json({"Status" : "Failed to update user", id})
 
-        } else {
-            return res.json({"Status" : "User not found, cannot update the user", id})
+            } else {
+                return res.status(404).json({"Status" : "User not found, cannot update the user", id})
+            }
+        } catch(err) {
+            return res.status(401).json({"Status" : "Cann't able to Update user", id})
         }
     })
     // Delete user with id
-    .delete((req, res) => {
-        let id = Number (req.params.id)
-        let index = users.findIndex(user => user.id === id)
-        
-        if (index === -1) { 
-            return res.status(404).json({"Status" : `User doesn't exist`, id})
-        }
+    .delete(async (req, res) => {
+        let id = req.params.id
 
-        // Remove 1 element from index
-        users.splice(index, 1)
-        fs.writeFile(fileName, JSON.stringify(users), (err, data) => {
-            if (err) {
-                console.error("File write error:", err);
-                return res.status(500).json({ "Status": "Failed to write file", error: err.message });
+        try {
+            const deletedUser = await Users.findByIdAndDelete(id) // MongoDB
+
+            if (deletedUser) {
+                return res.json({"Status" : `Successfully deleted user`, id})
             }
-            return res.json({"Status" : `Successfully deleted user`, id})
-        })
+        } catch(err) {
+            return res.status(500).json({id, "Status": "User not found to Delete", "error": err})
+        }
     })
 
 // Add a new user
@@ -130,24 +141,28 @@ app.post("/api/users", async (req, res) => {
             return res.status(400).json({error : "Please provide all information"})
         }
 
-    const existingUser = await Users.findOne({email: data_body.email})
+    try {
+        const existingUser = await Users.findOne({email: data_body.email}) // MongoDB
 
-    if (existingUser) {
-        return res.status(400).json({error : "User is already present, please try with different email."})
+        if (existingUser) {
+            return res.status(400).json({error : "User is already present, please try with different email."})
+        }
+
+        const result = await Users.create({
+            firstName: data_body.first_name,
+            lastName: data_body.last_name,
+            email: data_body.email,
+            gender: data_body.gender,
+            jobTitle: data_body.job_title
+        }) // MongoDB
+
+        res.json({
+            msg: "Successfuly added new user", 
+            user: result
+        })
+    } catch(err) {
+        return res.status(401).json({id, "Status": "Cann't able to Add new user", "error": err})
     }
-
-    const result = await Users.create({
-        firstName: data_body.first_name,
-        lastName: data_body.last_name,
-        email: data_body.email,
-        gender: data_body.gender,
-        jobTitle: data_body.job_title
-    })
-
-    res.json({
-        msg: "Successfuly added new user", 
-        user: result
-    })
 })
 
 
@@ -156,16 +171,10 @@ app.get("/", (req, res) => { res.redirect("/users") })
 
 // Route that returns HTML-Doc data
 app.get("/users", (req, res) => {
-    // let html = `
-    //     <ul>
-    //         ${users.map((users) => `<li>${users.first_name}  -  ${users.job_title}</li>`).join("")}
-    //     </ul>
-    // `
-    // res.send(html)
-
     res.sendFile(path.join(__dirname, "public", "main.html"))
 })
 
-app.listen(port, (req, res) => {
+// Server
+app.listen(port, () => {
     console.log(`Server is listening on: http://localhost:${port}`)
 })
