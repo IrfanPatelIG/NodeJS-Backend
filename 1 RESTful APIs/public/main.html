@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Form</title>
+
+    <style>
+        body {
+            overflow-x: hidden;
+        }
+
+        .main-div {
+            width: 100vw;
+            padding: 0 10px;
+            max-height: calc(500px);
+            margin: 10px auto;
+        }
+
+        h2, hr {
+            margin-top: 20px;
+        }
+
+        .users-list {
+            min-width: fit-content;
+            max-width: 70%;
+            max-height: 430px;
+            overflow: hidden scroll;
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+
+            & > li {
+                list-style: decimal;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="main-div">
+        <h1>Add a new User</h1>
+        <form action="/api/users" method="POST">
+            <input type="text" name="first_name" placeholder="Enter first name"  required>
+            <input type="text" name="last_name" placeholder="Enter last name"  required>
+            <input type="email" name="email" placeholder="Enter email" required>
+            <input type="text" name="gender" placeholder="Enter gender" required>
+            <input type="text" name="job_title" placeholder="Enter job title" required>
+            <button type="submit" >Submit</button>
+        </form>
+
+        <hr>
+        
+        <h2>Users</h2>
+        <button id="get-btn">Get</button>
+        <ul class="users-list"></ul>
+    </div>
+    
+    <script>
+        console.log("Hi, from User Form file!")
+        async function getData() {
+            console.log("From getData function")
+            let res = await fetch("http://localhost:3000/api/users")
+            let data = await res.json()
+            document.querySelector(".users-list").innerHTML = `
+                ${data.map((user, ind) => {
+                    return `<li>${user.first_name}</li>`
+                }).join("")}`
+
+            console.log(data)
+        }
+
+        document.getElementById("get-btn").addEventListener("click", () => getData());
+    </script>
+</body>
+</html>
