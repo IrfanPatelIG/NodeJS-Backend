@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Form</title>
+
+    <style>
+        body {
+            overflow-x: hidden;
+        }
+
+        .main-div {
+            width: 100vw;
+            padding: 0 10px;
+            max-height: calc(500px);
+            margin: 10px auto;
+        }
+
+        h2, hr {
+            margin-top: 20px;
+        }
+
+        .add-user {
+            width: 50vw;
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            grid-template-rows: 30px 30px;
+            gap: 6px;
+            row-gap: 12px;
+        }
+
+        .users-list {
+            min-width: fit-content;
+            max-width: 50%;
+            max-height: 410px;
+            overflow: hidden scroll;
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+
+            & > li {
+                padding: 0;
+                list-style: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="main-div">
+        <h1>Add a new User</h1>
+        <form class="add-user" action="/api/users" method="POST">
+            <input type="text" name="first_name" placeholder="Enter first name"  required>
+            <input type="text" name="last_name" placeholder="Enter last name"  required>
+            <input type="email" name="email" placeholder="Enter email" required>
+            <input type="text" name="gender" placeholder="Enter gender" required>
+            <input type="text" name="job_title" placeholder="Enter job title" required>
+            <button type="submit" >Submit</button>
+        </form>
+
+        <!-- Deleteing user form -->
+        <h1>Delete a User with Id</h1>
+        <form id="deleteUserForm">
+            <input type="text" id="userId" name="userId" placeholder="Enter Id of user to Delete" required>
+            <button type="submit">Delete user</button>
+        </form>
+
+        <hr>
+        
+        <h2>Users</h2>
+        <button id="get-btn">Get</button>
+        <ul class="users-list"></ul>
+    </div>
+    
+    <script>
+        console.log("Hi, from User Form file!")
+
+        // Delete User
+        const formDelete = document.getElementById("deleteUserForm")
+        const userIdInput = document.getElementById("userId")
+
+        formDelete.addEventListener("submit", async (e) => {
+            e.preventDefault()
+
+            try {
+                const res = await fetch(`/api/users/${encodeURIComponent(userIdInput.value.trim())}`, 
+                                {method: "DELETE"})
+            
+                const result = await res.json()
+
+                if (!res.ok) {
+                    alert(result.Status || "Could not delete the user.")
+                    return
+                }
+
+                alert(result.Status)
+                userIdInput.value = ""
+                await getData()
+            } catch (err) {
+                console.error("Delete request failed:", err);
+                alert("The delete request failed. Check the server connection.");
+            }
+        })
+
+
+        // Get Users
+        async function getData() {
+            let res = await fetch("http://localhost:3000/api/users")
+            let data = await res.json()
+
+            document.querySelector(".users-list").innerHTML = `
+                ${data.map((user) => {
+                    return `<li>${user.id} - ${user.first_name}</li>`
+                }).join("")}`
+        }
+
+        document.getElementById("get-btn").addEventListener("click", () => getData());
+    </script>
+</body>
+</html>
