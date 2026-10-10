@@ -1,15 +1,10 @@
 const express = require("express")
 const fs = require("fs")
-const cors = require('cors')
 const path = require("path")
 const mongoose = require('mongoose');
 
-
-// const users = require("./MOCK_DATA.json")
-
 const app = express()
 const port = 3000
-const fileName = "./MOCK_DATA.json"
 
 
 // Connection
@@ -45,7 +40,6 @@ const Users = mongoose.model("users", userSchema)
 
 
 // Middlewares
-app.use(cors())
 app.use(express.urlencoded({ extended:false }))
 app.use(express.static("public"))
 
@@ -54,7 +48,7 @@ app.use(express.static("public"))
 app.get("/api/users", (req, res) => {
     // Return all the users from MongoDB
     console.log("Sending user's data from MongoDB...")
-    // return res.json({msg: "Mongo"})
+    return res.json(Users.find({}))
 })
 
 app.route("/api/users/:id")
@@ -111,18 +105,19 @@ app.route("/api/users/:id")
 app.post("/api/users", async (req, res) => {
     let data_body = req.body
 
-    if (data_body.first_name &&
-        last_name &&
-        data_body.email &&
-        data_body.gender &&
-        data_body.job_title) {
-            res.status(400).json({error : "Please provide all information"})
+    if (!data_body.first_name ||
+        !data_body.last_name ||
+        !data_body.email ||
+        !data_body.gender ||
+        !data_body.job_title) {
+            return res.status(400).json({error : "Please provide all information"})
         }
 
-    Users.findOne({...data_body})
-        .then(() =>
-            res.status(400).json({error : "User is already present, please try with different email."})
-        )
+    const existingUser = await Users.findOne({email: data_body.email})
+
+    if (existingUser) {
+        return res.status(400).json({error : "User is already present, please try with different email."})
+    }
 
     const result = await Users.create({
         firstName: data_body.first_name,
@@ -134,7 +129,7 @@ app.post("/api/users", async (req, res) => {
 
     console.log(result)
 
-    res.status(201).json({
+    res.json({
         msg: "Successfuly added new user", 
         user: result
     })
