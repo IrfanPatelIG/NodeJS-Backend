@@ -1,0 +1,16 @@
+{
+  "name": "6-url-shortener",
+  "version": "1.0.0",
+  "description": "",
+  "license": "ISC",
+  "author": "Irfan",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "express": "^5.3.0",
+    "mongoose": "^9.11.1"
+  }
+}
