@@ -23,14 +23,9 @@ connectMongoDb("mongodb://127.0.0.1:27017/short-url")
         console.log("Error Conencting MongoDB\nError:", err)
     })
 
-// Health check
-app.get("/", async (req, res) => {
-    res.json({msg: "Server is live"})
-})
-
 // Routes
 app.use("/url", urlRoute)
-app.use("/view", staticRoute)
+app.use("/", staticRoute)  // Redirect to Home view
 
 app.get("/url/:shortId", async (req, res) => {
     const urlShortId = req.params.shortId
@@ -50,7 +45,7 @@ app.get("/url/:shortId", async (req, res) => {
 
     if (!shortUrl) 
         return res.status(404).json({error: "ShortID id is invalid!"})
-    
+
     res.redirect(shortUrl.redirectURL)
 })
 

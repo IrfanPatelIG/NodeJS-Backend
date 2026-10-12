@@ -1,7 +1,8 @@
 const URL = require("../models/urlSchema")
 
 async function handleGetHomeView(req, res) {
-    res.render("home")
+    const allUrls = await URL.find({})
+    res.render("home", {urls: allUrls})
 }
 
 module.exports = {

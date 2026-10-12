@@ -26,6 +26,35 @@
 
     <br>
 
-   
+    <table> 
+        <thead>
+            <th>Index</th>
+            <th>Short-Id</th>
+            <th>Redirect URL</th>
+            <th>Total Visits</th>
+            <th>Redirect</th>
+        </thead>
+        <tbody>
+            <% if (locals.urls) { %>
+                <% urls.forEach((url, ind) => { %>
+                    <tr>
+                        <td><%= ind+1 %></td> 
+                        <td><%= url.shortId %></td> 
+                        <td><%= url.redirectURL %></td>
+                        <td><%= url.visitHistory.length %></td>
+                        <td>
+                            <button onclick="handleRedirect('<%= url.shortId  %>')">Go</button>
+                        </td>
+                    </tr>
+                <% }); %>
+            <% } %>
+        </tbody>
+    </table>
+
+    <script>
+        async function handleRedirect(shortId) {
+            window.open(`http://localhost:8000/url/${shortId}`, "_blank", "noopener")
+        }
+    </script>
 </body>
 </html>
