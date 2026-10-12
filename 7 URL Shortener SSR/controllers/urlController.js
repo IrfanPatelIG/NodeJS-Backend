@@ -12,7 +12,8 @@ async function handleCreateNewShortURL(req, res) {
         redirectURL: body.url,
         viewHistory: []
     })
-    res.json({shortId: shortID})
+    // res.json({shortId: shortID})
+    res.render('home', { id: shortID})
 }
 
 async function handleGetShortURLByShortId(req, res) {
