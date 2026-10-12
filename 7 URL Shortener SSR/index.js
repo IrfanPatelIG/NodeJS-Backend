@@ -50,8 +50,7 @@ app.get("/url/:shortId", async (req, res) => {
 
     if (!shortUrl) 
         return res.status(404).json({error: "ShortID id is invalid!"})
-
-    // res.json({msg: `Successully fetched Short URL for ${urlShortId}`, url: shortUrl.redirectURL})
+    
     res.redirect(shortUrl.redirectURL)
 })
 
