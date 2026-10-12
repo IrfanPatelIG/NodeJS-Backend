@@ -16,10 +16,6 @@ async function handleCreateNewShortURL(req, res) {
     res.render('home', { id: shortID})
 }
 
-async function handleGetShortURLByShortId(req, res) {
-    
-}
-
 async function handleGetAnalyticsOfUrl(req, res) {
     const id = req.params.shortId
     const resultUrl = await URL.findOne({shortId: id})
@@ -39,6 +35,5 @@ async function handleGetAnalyticsOfUrl(req, res) {
 
 module.exports = {
     handleCreateNewShortURL,
-    handleGetShortURLByShortId,
     handleGetAnalyticsOfUrl
 }
