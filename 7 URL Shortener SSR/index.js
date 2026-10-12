@@ -3,6 +3,7 @@ const path = require("path")
 const {connectMongoDb} = require("./connect")
 const URL = require("./models/urlSchema")
 const urlRoute = require("./routes/urlRoutes")
+const staticRoute = require("./routes/staticRoutes")
 
 const app = express()
 const PORT = 8000
@@ -11,6 +12,7 @@ const PORT = 8000
 app.set("view engine", "ejs")
 app.set("views", path.resolve("./views"))
 app.use(express.json())
+app.use(express.urlencoded({extended: true}))
 
 // Connect to DB
 connectMongoDb("mongodb://127.0.0.1:27017/short-url")
@@ -22,16 +24,15 @@ connectMongoDb("mongodb://127.0.0.1:27017/short-url")
     })
 
 // Health check
-app.get("/test", async (req, res) => {
-    // res.json({msg: "Server is live"})
-    const allUrls = await URL.find({})
-    res.render("home", {urls: allUrls})
+app.get("/", async (req, res) => {
+    res.json({msg: "Server is live"})
 })
 
-// URL Routes
+// Routes
 app.use("/url", urlRoute)
+app.use("/view", staticRoute)
 
-app.get("/:shortId", async (req, res) => {
+app.get("/url/:shortId", async (req, res) => {
     const urlShortId = req.params.shortId
     if (!urlShortId) 
         return res.status(400).json({error: "URL is required!"})
