@@ -1,4 +1,5 @@
 const express = require("express")
+const path = require("path")
 const {connectMongoDb} = require("./connect")
 const URL = require("./models/urlSchema")
 const urlRoute = require("./routes/urlRoutes")
@@ -7,6 +8,8 @@ const app = express()
 const PORT = 8000
 
 // Middlewares
+app.set("view engine", "ejs")
+app.set("views", path.resolve("./views"))
 app.use(express.json())
 
 // Connect to DB
@@ -19,8 +22,10 @@ connectMongoDb("mongodb://127.0.0.1:27017/short-url")
     })
 
 // Health check
-app.get("/", (req, res) => {
-    res.json({msg: "Server is live"})
+app.get("/test", async (req, res) => {
+    // res.json({msg: "Server is live"})
+    const allUrls = await URL.find({})
+    res.render("home", {urls: allUrls})
 })
 
 // URL Routes
