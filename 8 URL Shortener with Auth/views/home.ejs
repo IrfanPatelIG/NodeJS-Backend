@@ -23,6 +23,11 @@
 </head>
 <body>
     <h1>URL Shortener - Home</h1>
+
+    <% if(locals.user) {%>
+        <h2>Welcome, <%= user.name %></h2> 
+    <% } %> 
+
     <br>
     <form method="POST" action="/url">
         <label for="urlIn">Enter the original URL: </label>
@@ -38,8 +43,8 @@
     <% if(locals.id) { %>
         <div>Short-Id generated: <%= id %></div>
     <% } %>
-    <br>
 
+    <br>
     <table>
         <thead >
             <th>Sr. no.</th>
