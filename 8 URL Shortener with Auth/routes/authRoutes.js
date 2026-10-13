@@ -3,6 +3,7 @@ const {handleUserSignUp, handleUserSignIn} = require("../controllers/authControl
 
 const router = express.Router()
 
-router.post("/", handleUserSignUp)
+router.post("/signup", handleUserSignUp)
+router.post("/signin", handleUserSignIn)
 
 module.exports = router

@@ -1,8 +1,8 @@
 const express = require("express")
 const path = require("path")
-const URL = require("./models/urlSchema")
 const {connectToMongoDb} = require("./connect")
 
+const authRoutes = require("./routes/authRoutes")
 const urlRoutes = require("./routes/urlRoutes")
 const staticRoutes = require("./routes/staticRoutes")
 
@@ -20,7 +20,11 @@ app.set("views", path.resolve("./views"))
 app.use(express.json())
 app.use(express.urlencoded({extended: true}))
 
+
 // Routes
+// Auth routes
+app.use("/auth", authRoutes)
+
 app.use("/", staticRoutes)
 app.use("/url", urlRoutes)
 
