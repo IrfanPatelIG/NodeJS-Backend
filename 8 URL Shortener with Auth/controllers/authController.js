@@ -1,3 +1,5 @@
+const User = require("../models/userSchema")
+
 async function handleUserSignUp(req, res) {
     
 }
