@@ -34,7 +34,6 @@ app.use("/url", restrictedToLoggedinUsersOnly, urlRoutes)
 app.use("/", checkAuth, staticRoutes)
 
 app.get("/:shortId", async (req, res) => {
-    console.log("handleGetUrlShortId called")
     const shortID = req.params.shortId
     if (!shortID)
         return res.status(401).json({msg: "Short-Id is required"})
