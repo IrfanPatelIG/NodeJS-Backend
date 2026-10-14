@@ -5,6 +5,6 @@ const { handleGoToHomeView, handleGoToSignUpView, handleGoToSignInView } = requi
 
 router.get("/", handleGoToHomeView)
 router.get("/signup", handleGoToSignUpView)
-router.get("/signIn", handleGoToSignInView)
+router.get("/signin", handleGoToSignInView)
 
 module.exports = router

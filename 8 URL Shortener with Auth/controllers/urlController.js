@@ -2,6 +2,7 @@ const shortId = require("shortid")
 const URL = require("../models/urlSchema")
 
 async function handleCreateNewUrlShortId(req, res) {
+    console.log("handleCreateNewUrlShortId called")
     const url = req.body?.url
     if (!url)
         return res.status(401).json({msg: "Url is required"}) 
@@ -22,26 +23,8 @@ async function handleCreateNewUrlShortId(req, res) {
     })
 }
 
-async function handleGetUrlShortId(req, res) {
-    const shortID = req.params.shortId
-    if (!shortID)
-        return res.status(401).json({msg: "Short-Id is required"})
-
-    const result = await URL.findOneAndUpdate({shortId: shortID}, {
-        $push: {
-            visitHistory: {
-                timestamp: Date.now()
-            }
-        }
-    })
-
-    if (!result) 
-        return res.status(401).json({msg: "Short-Id is invalid, please try another short-id"})
-
-    res.redirect(result.redirectURL)
-}
-
 async function handleGetShortIdAnalytics(req, res) {
+    console.log("handleGetShortIdAnalytics called")
     const id = req.params.shortId
 
     const result = await URL.findOne({shortId: id})
@@ -57,6 +40,5 @@ async function handleGetShortIdAnalytics(req, res) {
 
 module.exports = {
     handleCreateNewUrlShortId,
-    handleGetUrlShortId,
     handleGetShortIdAnalytics
 }
