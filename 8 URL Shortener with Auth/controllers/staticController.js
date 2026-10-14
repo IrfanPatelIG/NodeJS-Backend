@@ -1,11 +1,10 @@
 const URL = require("../models/urlSchema")
 
 async function handleGoToHomeView(req, res) {
-    console.log("handleGoToHomeView called")
-    const allUrls = await URL.find({})
-    
-    console.log("From staticController", req.user)
     const user = req?.user
+
+    const allUrls = await URL.find({createdBy: user?._id})
+
     res.render("home", {
         user,
         urls: allUrls
@@ -13,12 +12,10 @@ async function handleGoToHomeView(req, res) {
 }
 
 async function handleGoToSignUpView(req, res) {
-    console.log("handleGoToSignUpView called")
     res.render("signUp")
 }
 
 async function handleGoToSignInView(req, res) {
-    console.log("handleGoToSignInView called")
     res.render("signIn")
 }
 

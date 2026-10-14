@@ -4,7 +4,6 @@ const User = require("../models/userSchema")
 const URL = require("../models/urlSchema")
 
 async function handleUserSignUp(req, res) {
-    console.log("handleUserSignUp called")
     const {name, email, password} = req.body
 
     const result = await User.findOne({email})
@@ -25,7 +24,6 @@ async function handleUserSignUp(req, res) {
 }
 
 async function handleUserSignIn(req, res) {
-    console.log("handleUserSignIn called")
     const {email, password} = req.body
 
     const user = await User.findOne({

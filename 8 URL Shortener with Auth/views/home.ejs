@@ -24,7 +24,7 @@
 <body>
     <h1>URL Shortener - Home</h1>
 
-    <% if(locals.user) {%>
+    <% if(locals.user) { %>
         <h2>Welcome, <%= user.name %></h2> 
     <% } %> 
 
@@ -38,8 +38,10 @@
             >
         <button type="submit">Generate</button>
     </form>
+    <% if(locals.msg) { %>
+        <p>Error: <%= msg %></p> 
+    <% } %> 
 
-    <br>
     <% if(locals.id) { %>
         <div>Short-Id generated: <%= id %></div>
     <% } %>
@@ -72,7 +74,7 @@
 
     <script>
         function handleReidirect(shortId) {
-            window.open(`http://localhost:8001/url/${shortId}`, "_blank")
+            window.open(`http://localhost:8001/${shortId}`, "_blank")
         }
     </script>
 </body>

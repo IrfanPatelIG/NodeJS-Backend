@@ -2,29 +2,35 @@ const shortId = require("shortid")
 const URL = require("../models/urlSchema")
 
 async function handleCreateNewUrlShortId(req, res) {
-    console.log("handleCreateNewUrlShortId called")
+    const user = req?.user
     const url = req.body?.url
-    if (!url)
-        return res.status(401).json({msg: "Url is required"}) 
+    const allUrls = await URL.find({createdBy: user._id})
+
+    if (!url) {
+        return res.render("home", {
+            user,
+            urls: allUrls,
+            msg: "URL is required!"
+        })
+    }
 
     const shortID = shortId()
     
     await URL.create({
         shortId: shortID,
         redirectURL: url,
-        visitHistory: []
+        visitHistory: [],
+        createdBy: user._id 
     })
 
-    const allUrls = await URL.find({})
-
     res.render("home", {
+        user,
         id: shortID,
         urls: allUrls
     })
 }
 
 async function handleGetShortIdAnalytics(req, res) {
-    console.log("handleGetShortIdAnalytics called")
     const id = req.params.shortId
 
     const result = await URL.findOne({shortId: id})
