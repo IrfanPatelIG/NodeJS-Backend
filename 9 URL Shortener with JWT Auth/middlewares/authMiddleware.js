@@ -1,7 +1,8 @@
 const { getUser } = require("../services/auth")
 
 async function restrictedToLoggedinUsersOnly(req, res, next) {
-    const authToken = req.cookies?.token
+    const authHeader = req.headers["authorization"]
+    const authToken = authHeader.split("Bearer ")[1]
 
     if (!authToken) {
         console.log("Token is not present in cookies from restrictedToLoggedinUsersOnly")
@@ -20,7 +21,8 @@ async function restrictedToLoggedinUsersOnly(req, res, next) {
 }
 
 async function checkAuth(req, res, next) {
-    const authToken = req.cookies?.token
+    const authHeader = req.headers["authorization"]
+    const authToken = authHeader.split("Bearer ")[1]
 
     const user = getUser(authToken)
     req.user = user

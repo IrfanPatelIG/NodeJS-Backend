@@ -39,10 +39,10 @@ async function handleUserSignIn(req, res) {
     
     // Adding logged in user's jwt-signed token into cookie
     const token = setUser(user)
-    res.cookie("token", token)
+    // res.cookie("token", token)
     
     console.log("SignIn successful")
-    res.redirect("/")
+    res.json({token})
 }
 
 module.exports = {
