@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>URL Shortener - Home</title>
+    <style>
+        * {
+            font-family: Tahoma, Geneva, Verdana, sans-serif;
+        }
+        table, th, td {
+            border: 2px solid black;
+            border-collapse: collapse;
+            border-style: outset;
+            padding: 2px 3px;
+        }
+
+        .table-row:hover {
+            background-color: rgb(204, 204, 204);
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h1>URL Shortener - Home</h1>
+
+    <% if(locals.user?.name) { %>
+        <div>
+            <h2>Welcome, <%= user.name %></h2> 
+            <% if (user.role === "ADMIN") { %>
+                <h3>ADMIN</h3>
+            <% } %>
+        </div> 
+    <% } %> 
+
+    <br>
+    <form method="POST" action="/url">
+        <label for="url">Enter the original URL: </label>
+        <input 
+            type="text"
+            name="url"
+            placeholder="https://example.com"
+            >
+        <button type="submit">Generate</button>
+    </form>
+    <% if(locals.msg) { %>
+        <p>Message: <%= msg %></p> 
+    <% } %> 
+
+    <% if(locals.id) { %>
+        <div>Short-Id generated: http://localhost:8001/<%= id %></div>
+    <% } %>
+
+    <br>
+    <table>
+        <thead >
+            <th>Sr. no.</th>
+            <th>Short-ID</th>
+            <th>Original URL</th>
+            <th>Total clicks</th>
+            <th>Redirect</th>
+        </thead>
+        <tbody>
+            <% if (locals.urls) { %>
+                <% urls.forEach((url, ind) => { %>
+                    <tr class="table-row">
+                        <td><%=ind+1%></td>
+                        <td><%=url.shortId%></td>
+                        <td><%=url.redirectURL%></td>
+                        <td><%=url.visitHistory.length%></td>
+                        <td>
+                            <button onclick="handleReidirect('<%= url.shortId %>')">Go</button>
+                        </td>
+                    </tr>
+                <% }) %>
+            <% } %>
+        </tbody>
+    </table>
+
+    <script>
+        function handleReidirect(shortId) {
+            window.open(`http://localhost:8001/${shortId}`, "_blank")
+        }
+    </script>
+</body>
+</html>
