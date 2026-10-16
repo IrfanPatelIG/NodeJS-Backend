@@ -4,13 +4,10 @@ const URL = require("../models/urlSchema")
 async function handleCreateNewUrlShortId(req, res) {
     const user = req?.user
     const url = req.body?.url
-    const allUrls = await URL.find({createdBy: user._id})
-
-
+    
     if (!url) {
         return res.render("home", {
             user,
-            urls: allUrls,
             msg: "URL is required!"
         })
     }
@@ -23,7 +20,9 @@ async function handleCreateNewUrlShortId(req, res) {
         visitHistory: [],
         createdBy: user._id 
     })
-
+    
+    const allUrls = await URL.find({createdBy: user._id})
+    
     res.render("home", {
         user,
         id: shortID,
