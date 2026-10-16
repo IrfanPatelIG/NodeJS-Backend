@@ -25,20 +25,8 @@ function handleGoToSignInView(req, res) {
     res.render("signin")
 }
 
-async function handleGoToHomeViewAdmin(req, res) {
-    const user = req.user
-
-    const allUrls = await URL.find({})
-
-    return res.render("home", {
-        urls: allUrls,
-        user: user 
-    })
-}
-
 module.exports = {
     handleGoToHomeView,
     handleGoToSignUpView,
     handleGoToSignInView,
-    handleGoToHomeViewAdmin
 }
