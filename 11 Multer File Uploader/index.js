@@ -1,7 +1,6 @@
 const express = require("express")
 const path = require("path")
 const multer = require("multer")
-const upload = multer({ dest: "uploads/" })
 
 const app = express()
 const PORT = 4000
@@ -10,6 +9,17 @@ app.set("view engine", "ejs")
 app.set("views", path.resolve("./views"))
 
 app.use(express.urlencoded({extended: true}))
+
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, "./uploads")
+    },
+    filename: function (req, file, cb) {
+        cb(null, `${Date.now()}-${file.originalname}`)
+    }
+})
+
+const upload = multer({ storage: storage })
 
 app.get("/", (req, res) => {
     console.log("Req:", req.query?.uploaded)
