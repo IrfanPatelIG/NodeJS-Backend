@@ -24,7 +24,7 @@ const upload = multer({ storage: storage })
 app.get("/", (req, res) => {
     console.log("Req:", req.query?.uploaded)
     res.render("homepage", { 
-        uploaded: req.query?.uploaded === 1
+        uploaded: req.query?.uploaded
     })
 })
 
