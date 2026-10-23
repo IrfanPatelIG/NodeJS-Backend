@@ -4,13 +4,14 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "strat": "node --watch index.js"
+    "start": "node --watch index.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {
+    "ejs": "^7.0.2",
     "express": "^5.3.0",
     "multer": "^2.5.0"
   }
