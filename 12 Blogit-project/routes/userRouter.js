@@ -1,6 +1,7 @@
 const User = require("../models/user")
 const { createHmac } = require("crypto")
 const express = require("express")
+const { validateToken } = require("../services/authentication")
 const router = express.Router()
 
 // Serve Static pages
@@ -30,6 +31,8 @@ router.post("/signin", async (req, res) => {
     try {
         const token = await User.matchPasswordAndGenerateToken(email, password)
         console.log("User Signed-In successfully\nToken:", token)
+        const data = await validateToken(token)
+        console.log("User Data after verifying with jwt:", data)
     } catch (err) {
         console.log(err)
         return res.status(404).json({"Error" : err.message})
