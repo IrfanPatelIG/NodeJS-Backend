@@ -28,11 +28,11 @@ router.post("/signin", async (req, res) => {
     const {email, password} = req.body
 
     try {
-        const user = await User.matchPassword(email, password)
-        console.log("User Signed-In successfully\nUser:", user)
+        const token = await User.matchPasswordAndGenerateToken(email, password)
+        console.log("User Signed-In successfully\nToken:", token)
     } catch (err) {
         console.log(err)
-        return res.status(404).json({"Error" : err})
+        return res.status(404).json({"Error" : err.message})
     }
  
     return res.redirect("/")
