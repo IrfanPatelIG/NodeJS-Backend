@@ -1,6 +1,8 @@
 const express = require("express")
 const path = require("path")
 const mongoose = require("mongoose")
+const cookieParser = require("cookie-parser")
+const { checkForAuthTokenCookie } = require("./middlewares/authentication")
 
 // Router
 const userRoutes = require("./routes/userRouter")
@@ -18,12 +20,16 @@ app.set("views", path.resolve("./views"))
 
 
 // Middlewares
+app.use(cookieParser())
 app.use(express.urlencoded({extended: true}))
+app.use(checkForAuthTokenCookie("token"))
 
 
 // Routes
 app.get("/", (req, res) => {
-    res.render("homePage")
+    res.render("homePage", 
+        {user: req?.user}
+    )
 })
 
 app.use("/user", userRoutes)

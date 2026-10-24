@@ -19,14 +19,28 @@
                 <a class="nav-link" href="#">Pricing</a>
 
                 <a class="btn-solid theme-primary" href="#" role="button" data-bs-toggle="menu" aria-expanded="false">
-                    User
+                    <%= locals.user? user.fullName.split(" ")[0] : "User" %>
                 </a>
-                <div class="menu">
-                    <a class="menu-item" href="#">Profile</a>
-                    <a class="menu-item red" href="#">Logout</a>
+                <div class="menu menu-translucent">
+                    <% if (locals.user) { %>
+                        <a class="menu-item" href="#">Profile</a>
+                        <a class="menu-item theme-danger" href="#">Logout</a>
+                    <% } else { %>
+                        <a class="menu-item disabled" aria-disabled="true" href="#">Profile</a>
+                        <a class="menu-item disabled" aria-disabled="true" href="#">Logout</a>
+                    <% } %>
                 </div>
             </div>
         </div>
     </dialog>
   </div>
 </nav>
+
+<% if (locals.error) { %>
+    <div class="container mt-4">
+        <div class="alert theme-danger" role="alert">
+            <p><%= locals.error %></p>
+            <button type="button" class="btn-close ms-auto" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    </div>
+<% } %>

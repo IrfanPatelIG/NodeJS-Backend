@@ -16,7 +16,7 @@ router.get("/signin", (req, res) => {
 
 // Post endpoints
 router.post("/signup", async (req, res) => {
-    const { fullName, email, password } = req.body
+    const { fullName, email, password } = req?.body
     await User.create({
         fullName,
         email,
@@ -26,19 +26,22 @@ router.post("/signup", async (req, res) => {
 })
 
 router.post("/signin", async (req, res) => {
-    const {email, password} = req.body
+    const {email, password} = req?.body
 
     try {
         const token = await User.matchPasswordAndGenerateToken(email, password)
         console.log("User Signed-In successfully\nToken:", token)
+
         const data = await validateToken(token)
         console.log("User Data after verifying with jwt:", data)
+
+        return res.cookie("token", token).redirect("/")
     } catch (err) {
         console.log(err)
-        return res.status(404).json({"Error" : err.message})
+        return res.render("signinPage", {
+            "error" : err.message
+        })
     }
- 
-    return res.redirect("/")
 })
 
 

@@ -7,9 +7,18 @@
     <%- include("./partials/head") %>
 </head>
 <body>
-    <%- include("./partials/navBar") %>
+    <%- include("./partials/navBar", {user: locals.user? user : null}) %>
 
-    <h1>Hi, Home</h1>
+    <main class="container pt-4">
+        <h1>Welcome, Home
+            <% if (locals.user) { %>
+                <span>- </span><%= user.fullName.split(" ")[0] %>
+            <% } %>
+        </h1>
+        <% if (locals.user) { %>
+            <p class="mt-10">User: <%= JSON.stringify(user) %></p>
+        <% } %>
+    </main>
     
     <%- include("./partials/scripts") %>
 </html> 

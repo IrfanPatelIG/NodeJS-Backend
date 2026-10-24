@@ -2,19 +2,20 @@ const jwt = require("jsonwebtoken")
 
 const secret = "irfan@jwt"
 
-async function createTokenForUser(user) {
+function createTokenForUser(user) {
     const payload = {
+        _id: user._id,
         fullName: user.fullName,
         email: user.email,
         role: user.role,
         salt: user.salt
     }
-    const token = await jwt.sign(payload, secret)
+    const token = jwt.sign(payload, secret)
     return token
 }
 
-async function validateToken(token) {
-    const user = await jwt.verify(token, secret)
+function validateToken(token) {
+    const user = jwt.verify(token, secret)
     return user
 }
 

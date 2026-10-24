@@ -58,7 +58,7 @@ userSchema.static("matchPasswordAndGenerateToken", async function (email, passwo
         .digest("hex")
 
     if (hashedPassword !== user.password) 
-        throw new Error("Invalid Password!")
+        throw new Error("Inccorect Email or Password!")
 
     const token = createTokenForUser(user)
     return token
