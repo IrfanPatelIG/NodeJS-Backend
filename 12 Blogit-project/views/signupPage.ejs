@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BLOGit - SignUp</title>
+    <%- include("./partials/head") %>
+</head>
+<body>
+
+    <main class="form-container" >
+        <h1>SignUp</h1>
+        <form action="/user/signup" method="POST"
+            style="width: 300px; margin-inline: auto; margin-top: 100px; gap: 12px;"> 
+            <div class="mb-3">
+                <label for="exampleInputFullName" class="form-label">Full Name</label>
+                <input type="text" name="fullName" class="form-control" id="exampleInputFullName" required>
+            </div>
+            <div class="mb-3">
+                <label for="exampleInputEmail1" class="form-label">Email address</label>
+                <input type="email" name="email" class="form-control" id="exampleInputEmail1" required aria-describedby="emailHelp">
+                <div id="emailHelp" class="form-text">We’ll never share your email with anyone else.</div>
+            </div>
+            <div class="mb-3">
+                <label for="exampleInputPassword1" class="form-label">Password</label>
+                <input type="password" name="password" class="form-control" id="exampleInputPassword1" required>
+            </div>
+            <div class="mb-3 form-field">
+                <!-- <input type="checkbox" id="exampleCheck1" class="check"> -->
+                <label for="exampleCheck1">Already have an account? <a href="/user/signin">SingIn</a></label>
+            </div>
+            <button type="submit" class="btn-solid theme-primary">SingUp</button>
+        </form>
+    </main>
+    
+    <%- include("./partials/scripts") %>
+</body>
+</html>
