@@ -1,0 +1,20 @@
+{
+  "name": "Blogit-project",
+  "version": "1.0.0",
+  "description": "This is a simple Blogging web-app that is built in Node.js, Express and REST APIs",
+  "license": "ISC",
+  "author": "Irfan Patel",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js"
+  },
+  "dependencies": {
+    "ejs": "^7.0.2",
+    "express": "^5.3.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.14"
+  }
+}
