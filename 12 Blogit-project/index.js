@@ -18,6 +18,9 @@ app.get("/", (req, res) => {
     res.json({health: "Server is live!"})
 })
 
+app.get("/home", (req, res) => {
+    res.render("homePage")
+})
 
 // Server
 app.listen(PORT, () => {
