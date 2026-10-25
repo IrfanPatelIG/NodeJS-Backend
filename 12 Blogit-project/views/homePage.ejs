@@ -15,13 +15,15 @@
     <main class="container pt-4">
         <h1>Welcome, Home
             <% if (locals.user) { %>
-                <span>- </span><%= user.fullName.split(" ")[0] %>
+                <span>- <%= user.fullName.split(" ")[0] %></span>
+            <% } else { %>
+                <span class="fs-xl">- Please <a href="/user/signin" class="theme-warning">SignIn</a></span>
             <% } %>
         </h1>
         <% if (locals.blogs) { %>
             
             <div class="container">
-                <span>Total Blogs Added: <%- blogs.length %></span>
+                <span class="alert theme-accent w-fit">Total Blogs Added: <%- blogs.length %></span>
             </div>
 
         <% } %>

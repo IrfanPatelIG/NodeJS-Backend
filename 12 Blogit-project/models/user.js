@@ -49,7 +49,7 @@ userSchema.pre("save", function () {
 userSchema.static("matchPasswordAndGenerateToken", async function (email, password) {
     const user = await this.findOne({email})
     if (!user) 
-        throw new Error("User not found, please try again with another Email!")
+        throw new Error("Inccorect Email or Password!")
 
     const salt = user.salt
 

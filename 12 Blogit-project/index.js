@@ -2,6 +2,8 @@ const express = require("express")
 const path = require("path")
 const mongoose = require("mongoose")
 const cookieParser = require("cookie-parser")
+const multer = require("multer")
+
 const { checkForAuthTokenCookie, restrictToSignedInUsersOnly } = require("./middlewares/authentication")
 
 // Router
@@ -16,7 +18,7 @@ mongoose.connect("mongodb://127.0.0.1:27017/blogit-app")
 const app = express()
 const PORT = 8000
 
-// Settign views
+// Setting views
 app.set("view engine", "ejs")
 app.set("views", path.resolve("./views"))
 
