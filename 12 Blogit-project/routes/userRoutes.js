@@ -29,11 +29,6 @@ router.post("/signin", async (req, res) => {
 
     try {
         const token = await User.matchPasswordAndGenerateToken(email, password)
-        console.log("User Signed-In successfully\nToken:", token)
-
-        const data = await validateToken(token)
-        console.log("User Data after verifying with jwt:", data)
-
         return res.cookie("token", token).redirect("/")
     } catch (err) {
         console.log(err)

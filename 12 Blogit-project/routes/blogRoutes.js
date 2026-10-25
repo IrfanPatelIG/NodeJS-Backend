@@ -14,14 +14,19 @@ router.get("/add-new", (req, res) => {
 router.post("/add-new", async (req, res) => {
     const { title, descriptionBody, coverImg } = req.body
 
-    const result = await Blog.create({
-        title,
-        description: descriptionBody,
-        coverImgURL: coverImg,
-        author: req?.user._id
-    })
-    
-    return res.redirect(`/blog/add-new?title=${encodeURIComponent(result.title)}`)
+    try {
+        const result = await Blog.create({
+            title,
+            description: descriptionBody,
+            coverImgURL: coverImg,
+            author: req?.user._id
+        })
+        
+        return res.redirect(`/blog/add-new?title=${encodeURIComponent(result.title)}`)
+    } catch (err) {
+        console.log(err)
+        return res.render("homePage", {error: err.message})
+    }
 })
 
 module.exports = router

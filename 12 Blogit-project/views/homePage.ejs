@@ -7,7 +7,10 @@
     <%- include("./partials/head") %>
 </head>
 <body>
-    <%- include("./partials/navBar", {user: locals.user? user : null}) %>
+    <%- include("./partials/navBar", {
+        user: locals.user? user : null,
+        error: locals.error? error : null
+    }) %>
 
     <main class="container pt-4">
         <h1>Welcome, Home
@@ -15,8 +18,12 @@
                 <span>- </span><%= user.fullName.split(" ")[0] %>
             <% } %>
         </h1>
-        <% if (locals.user) { %>
-            <p class="mt-10">User: <%= JSON.stringify(user) %></p>
+        <% if (locals.blogs) { %>
+            
+            <div class="container">
+                <span>Total Blogs Added: <%- blogs.length %></span>
+            </div>
+
         <% } %>
     </main>
     

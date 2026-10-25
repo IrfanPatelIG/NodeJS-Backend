@@ -15,6 +15,22 @@ function checkForAuthTokenCookie(cookieName) {
     }
 }
 
+function restrictToSignedInUsersOnly(req, res, next) {
+    const cookieToken = req?.cookies["token"]
+    if (!cookieToken)
+        return res.render("homePage", {
+            error: "Unauthorized User! please SignIn first."
+        })
+
+    try {
+        const userPayload = validateToken(cookieToken)
+        req.user = userPayload
+    } catch (err) {}
+
+    return next()
+}
+
 module.exports = {
     checkForAuthTokenCookie,
+    restrictToSignedInUsersOnly
 }

@@ -2,11 +2,12 @@ const express = require("express")
 const path = require("path")
 const mongoose = require("mongoose")
 const cookieParser = require("cookie-parser")
-const { checkForAuthTokenCookie } = require("./middlewares/authentication")
+const { checkForAuthTokenCookie, restrictToSignedInUsersOnly } = require("./middlewares/authentication")
 
 // Router
 const userRouter = require("./routes/userRoutes")
 const blogRouter = require("./routes/blogRoutes")
+const { Blog } = require("./models/blog")
 
 // DB Connection
 mongoose.connect("mongodb://127.0.0.1:27017/blogit-app")
@@ -31,14 +32,25 @@ app.use((req, res, next) => {
 
 
 // Routes
-app.get("/", (req, res) => {
-    res.render("homePage", 
-        {user: req?.user}
-    )
+app.get("/", async (req, res) => {
+    const user = req?.user
+
+    let blogs
+    if (user)
+        blogs = await Blog.find({author: user._id})
+
+    res.render("homePage", {
+        user: user,
+        blogs
+    })
 })
 
 app.use("/user", userRouter)
-app.use("/blog", blogRouter)
+
+app.get("/blog", (req, res) => {
+    res.redirect(`/user/signin`)
+})
+app.use("/blog", restrictToSignedInUsersOnly, blogRouter)
 
 // Server
 app.listen(PORT, () => {
