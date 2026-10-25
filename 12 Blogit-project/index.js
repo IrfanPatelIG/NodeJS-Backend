@@ -23,6 +23,10 @@ app.set("views", path.resolve("./views"))
 app.use(cookieParser())
 app.use(express.urlencoded({extended: true}))
 app.use(checkForAuthTokenCookie("token"))
+app.use((req, res, next) => {
+    res.locals.currentPath = req.path
+    next()
+})
 
 
 // Routes

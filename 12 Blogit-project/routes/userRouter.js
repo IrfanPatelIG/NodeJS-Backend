@@ -1,5 +1,4 @@
 const User = require("../models/user")
-const { createHmac } = require("crypto")
 const express = require("express")
 const { validateToken } = require("../services/authentication")
 const router = express.Router()
@@ -44,5 +43,10 @@ router.post("/signin", async (req, res) => {
     }
 })
 
+router.get("/logout", async (req, res) => {
+    res.clearCookie("token")
+    console.log("Lougout successfully!")
+    return res.redirect("/")
+})
 
 module.exports = router
