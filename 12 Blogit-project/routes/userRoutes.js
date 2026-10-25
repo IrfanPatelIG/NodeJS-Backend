@@ -1,6 +1,6 @@
 const User = require("../models/user")
-const express = require("express")
 const { validateToken } = require("../services/authentication")
+const express = require("express")
 const router = express.Router()
 
 // Serve Static pages
@@ -21,7 +21,7 @@ router.post("/signup", async (req, res) => {
         email,
         password
     })
-    return res.redirect("/")
+    return res.redirect("/user/signin")
 })
 
 router.post("/signin", async (req, res) => {

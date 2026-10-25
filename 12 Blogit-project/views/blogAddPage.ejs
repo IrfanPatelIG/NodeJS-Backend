@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog - Add New Blog</title>
+    <%- include("./partials/head") %>
+</head>
+<body>
+    <%- include("./partials/navBar", {user: locals.user? user : null}) %>
+
+    <div class="container mt-4 w-50">
+        <% if (locals.title) { %>
+            <div class="mt-4 mb-6">
+                <div class="alert theme-success" role="alert">
+                    <p>A Blog "<%= locals.title %>" is created successfully!</p>
+                    <button type="button" class="btn-close ms-auto" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            </div>
+        <% } %>
+
+        <form action="/blog/add-new" method="POST">
+            <div class="form-field">
+                <label for="title" class="form-label">Title <%- include("./partials/small/important") %></label>
+                <input type="text" name="title" class="form-control" id="title" required>
+            </div>
+
+            <div class="form-field mt-5">
+                <label for="formControlTextarea" class="form-label">Description Body <%- include("./partials/small/important") %></label>
+                <textarea class="form-control" name="descriptionBody" id="formControlTextarea" required></textarea>
+            </div>
+
+            <div class="form-field mt-5">
+                <label for="coverImg" class="form-label">Cover Image URL</label>
+                <input type="file" name="coverImg" class="form-control" id="coverImg">
+            </div>
+
+            <div class="form-field mt-10">
+                <button type="submit" class="btn-solid w-25 mx-auto theme-primary">Add</button>
+            </div>
+        </form>
+    </div>
+
+    <%- include("./partials/scripts") %>
+</body>
+</html>

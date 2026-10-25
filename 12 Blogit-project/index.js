@@ -5,7 +5,8 @@ const cookieParser = require("cookie-parser")
 const { checkForAuthTokenCookie } = require("./middlewares/authentication")
 
 // Router
-const userRoutes = require("./routes/userRouter")
+const userRouter = require("./routes/userRoutes")
+const blogRouter = require("./routes/blogRoutes")
 
 // DB Connection
 mongoose.connect("mongodb://127.0.0.1:27017/blogit-app")
@@ -36,7 +37,8 @@ app.get("/", (req, res) => {
     )
 })
 
-app.use("/user", userRoutes)
+app.use("/user", userRouter)
+app.use("/blog", blogRouter)
 
 // Server
 app.listen(PORT, () => {

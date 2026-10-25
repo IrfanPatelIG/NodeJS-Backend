@@ -14,21 +14,21 @@
         <form action="/user/signin" method="POST"
             style="width: 300px; margin-inline: auto; margin-top: 80px; gap: 12px;">
             <div class="mb-3">
-                <label for="exampleInputEmail1" class="form-label">Email address</label>
-                <input type="email" name="email" class="form-control" id="exampleInputEmail1" required aria-describedby="emailHelp">
+                <label for="inputEmail" class="form-label">Email address</label>
+                <input type="email" name="email" class="form-control" id="inputEmail" required aria-describedby="emailHelp">
                 <div id="emailHelp" class="form-text">We’ll never share your email with anyone else.</div>
             </div>
             <div class="mb-3">
-                <label for="exampleInputPassword1" class="form-label">Password</label>
-                <input type="password" name="password" class="form-control" id="exampleInputPassword1" required>
+                <label for="inputPassword" class="form-label">Password</label>
+                <input type="password" name="password" class="form-control" id="inputPassword" required>
             </div>
             <div class="mb-3 form-field">
-                <!-- <input type="checkbox" id="exampleCheck1" class="check"> -->
-                <label for="exampleCheck1">Don't have an account? <a href="/user/signup">SingUp</a></label>
+                <!-- <input type="checkbox" id="checkBox" class="check"> -->
+                <label for="checkBox">Don't have an account? <a href="/user/signup">SingUp</a></label>
             </div>
             <button type="submit" class="btn-solid theme-primary">SignIn</button>
-            </form>
-        </main>
+        </form>
+    </main>
     
     <%- include("./partials/scripts") %>
 </body>

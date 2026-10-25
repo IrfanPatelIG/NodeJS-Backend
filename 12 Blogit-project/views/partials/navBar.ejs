@@ -15,8 +15,8 @@
         <div class="drawer-body" style="justify-content: flex-end !important;">
             <div class="nav nav-pills navbar-nav">
                 <a class="nav-link active" aria-current="page" href="/">Home</a>
-                <% if (locals.user) { %>
-                    <a class="nav-link" href="#">Add Blog</a>
+                <% if (locals.user && locals.currentPath !== "/blog/add-new") { %>
+                    <a class="nav-link" href="/blog/add-new">Add Blog</a>
                 <% } %>
                 <a class="nav-link" style="margin-right: 20px;" href="#">About</a>
 
