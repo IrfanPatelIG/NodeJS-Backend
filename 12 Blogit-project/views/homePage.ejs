@@ -13,7 +13,7 @@
     }) %>
 
     <main class="container pt-4">
-        <div class="d-flex justify-content-between align-items-center">
+        <div class="d-flex justify-content-between align-items-center flex-wrap">
             <h1>Welcome, Home
                 <% if (locals.user) { %>
                     <span>- <%= user.fullName.split(" ")[0] %></span>
@@ -30,7 +30,7 @@
         </div>
     </main>
 
-    <div class="container mt-8 mb-12 d-flex flex-wrap gap-6 justify-content-center">
+    <div class="container blogs-container mt-8 mb-12 d-flex flex-wrap gap-6 justify-content-start">
         <% if (locals.blogs) { %>
             <% blogs.forEach(blog => { %>
                 <section class="card shadow-opacity-50 shadow-primary bg-body rounded hover-lift" style="width: 320px; height: 380px;">

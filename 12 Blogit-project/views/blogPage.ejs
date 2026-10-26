@@ -12,8 +12,13 @@
         error: locals.error? error : null
     }) %>
     
-    <div class="container w-50 mt-4">
-        <div class="card mb-6">
+    <div class="container mt-4 d-flex gap-4 justify-content-center flex-wrap">
+        <a href="/">
+            <button type="button" class="h-fit theme-primary btn-solid btn-styled">
+                Go Back
+            </button>    
+        </a>
+        <div class="w-75 card mb-6">
             <img src="/uploads/<%- blog.coverImgURL %>" cl  ass="card-img-top"
                 style="height: 400px; object-fit: contain; object-position: center;"
                 alt="Cover Image">
@@ -26,10 +31,15 @@
                         </span>
                         <span class="avatar" style="--bs-avatar-size: 3rem;">
                             <img class="avatar-img" src="<%- blog.author.profileImgURL %>" alt="avatar img">
+                            <% if (locals.user) { %>
+                                <% if (user._id.toString() === blog.author._id.toString()) { %>
+                                    <span class="avatar-status status-online" role="img" aria-label="Online"></span>
+                                <% } %>
+                            <% }%>
                         </span>
                     </div>
                 </div>
-                <pre class="card-text fg-white px-2"><%- blog.description %></pre>
+                <pre class="card-text fg-white px-2" style="white-space: pre-wrap; overflow-wrap: anywhere;"><%- blog.description %></pre>
                 <p class="card-date mt-3"><small class="fg-2">Uploaded - <%= getReadableFullDate(blog.createdAt) %></small></p>
             </div>
         </div>

@@ -38,8 +38,8 @@ app.use((req, res, next) => {
 app.get("/", async (req, res) => {
     const user = req?.user
 
-    let blogs
-    blogs = await Blog.find({})
+    let blogs = await Blog.find({})
+    blogs = blogs.sort((a, b) => b.createdAt - a.createdAt)
 
     res.render("homePage", {
         user: user,
