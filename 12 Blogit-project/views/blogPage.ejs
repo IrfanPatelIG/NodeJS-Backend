@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blogit - <%= locals.blog? blog.title : "Title" %></title>
+    <%- include("./partials/head") %>
+</head>
+<body>
+    <%- include("./partials/navBar", {
+        user: locals.user? user : null,
+        error: locals.error? error : null
+    }) %>
+    
+    <div class="container w-50 mt-4">
+        <div class="card mb-6">
+            <img src="/uploads/<%- blog.coverImgURL %>" cl  ass="card-img-top"
+                style="height: 400px; object-fit: contain; object-position: center;"
+                alt="Cover Image">
+            <div class="card-body">
+                <div class="card-title mb-3 d-flex gap-2 justify-content-between">
+                    <h4 class="title mb-1 align-self-end"><%- blog.title %></h4>
+                    <div class="author-avatar d-flex gap-2 flex-wrap">
+                        <span class="author mb-1 fg-secondary fs-md fst-italic align-self-end">
+                            Author: <%- blog?.author?.fullName %>
+                        </span>
+                        <span class="avatar" style="--bs-avatar-size: 3rem;">
+                            <img class="avatar-img" src="<%- blog.author.profileImgURL %>" alt="avatar img">
+                        </span>
+                    </div>
+                </div>
+                <pre class="card-text fg-white px-2"><%- blog.description %></pre>
+                <p class="card-date mt-3"><small class="fg-2">Uploaded - <%= getReadableFullDate(blog.createdAt) %></small></p>
+            </div>
+        </div>
+    </div>
+
+    <%- include("./partials/scripts") %>
+</body>
+</html>

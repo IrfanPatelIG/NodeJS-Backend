@@ -24,6 +24,7 @@ app.set("views", path.resolve("./views"))
 
 
 // Middlewares
+app.use(express.static("./public"))  // To serve Static files
 app.use(cookieParser())
 app.use(express.urlencoded({extended: true}))
 app.use(checkForAuthTokenCookie("token"))
@@ -38,8 +39,7 @@ app.get("/", async (req, res) => {
     const user = req?.user
 
     let blogs
-    if (user)
-        blogs = await Blog.find({author: user._id})
+    blogs = await Blog.find({})
 
     res.render("homePage", {
         user: user,
@@ -48,11 +48,7 @@ app.get("/", async (req, res) => {
 })
 
 app.use("/user", userRouter)
-
-app.get("/blog", (req, res) => {
-    res.redirect(`/user/signin`)
-})
-app.use("/blog", restrictToSignedInUsersOnly, blogRouter)
+app.use("/blog", blogRouter)
 
 // Server
 app.listen(PORT, () => {

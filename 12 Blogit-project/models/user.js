@@ -19,9 +19,9 @@ const userSchema = new Schema({
         type: String,
         required: true
     },
-    proflieImageURL: {
+    profileImgURL: {
         type: String,
-        default: "./images/defaultProfile.png"
+        default: "/images/defaultProfile.png"
     },
     role: {
         type: String,

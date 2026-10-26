@@ -1,6 +1,9 @@
 const express = require("express")
 const multer = require("multer")
 const { Blog } = require("../models/blog")
+const { getReadableFullDate } = require("../services/utilities")
+const User = require("../models/user")
+const { restrictToSignedInUsersOnly } = require("../middlewares/authentication")
 
 const router = express.Router()
 
@@ -17,14 +20,28 @@ const storage = multer.diskStorage({
 const upload = multer({storage: storage})
 
 
-router.get("/add-new", (req, res) => {
+router.get("/add-new", restrictToSignedInUsersOnly, (req, res) => {
     res.render("blogAddPage", {
         user: req?.user,
         title: req?.query?.title
     })
 })
 
-router.post("/add-new", upload.single("coverImg"), async (req, res) => {
+router.get("/:blogId", async (req, res) => {
+    const blogId = req.params.blogId
+
+    const blog = await Blog.findOne({_id: blogId}).populate("author")
+    console.log(blog)
+
+    return res.render("blogPage", {
+        user: req.user,
+        blog,
+        getReadableFullDate
+    })
+})
+
+// Post
+router.post("/add-new", restrictToSignedInUsersOnly, upload.single("coverImg"), async (req, res) => {
     const { title, descriptionBody, coverImg } = req.body
 
     try {

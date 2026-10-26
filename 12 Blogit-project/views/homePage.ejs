@@ -13,21 +13,39 @@
     }) %>
 
     <main class="container pt-4">
-        <h1>Welcome, Home
-            <% if (locals.user) { %>
-                <span>- <%= user.fullName.split(" ")[0] %></span>
-            <% } else { %>
-                <span class="fs-xl">- Please <a href="/user/signin" class="theme-warning">SignIn</a></span>
+        <div class="d-flex justify-content-between align-items-center">
+            <h1>Welcome, Home
+                <% if (locals.user) { %>
+                    <span>- <%= user.fullName.split(" ")[0] %></span>
+                <% } else { %>
+                    <span class="fs-xl">- Please <a href="/user/signin" class="theme-warning">SignIn</a></span> 
+                    <span class="fs-xl">to ad new Blogs</span>
+                <% } %>
+            </h1>
+            <% if (locals.blogs) { %>
+                <div class="kpi-container mt-4">
+                    <span class="alert theme-accent w-fit">Total Blogs: <%- blogs.length %></span>
+                </div>
             <% } %>
-        </h1>
-        <% if (locals.blogs) { %>
-            
-            <div class="container">
-                <span class="alert theme-accent w-fit">Total Blogs Added: <%- blogs.length %></span>
-            </div>
-
-        <% } %>
+        </div>
     </main>
+
+    <div class="container mt-8 mb-12 d-flex flex-wrap gap-6 justify-content-center">
+        <% if (locals.blogs) { %>
+            <% blogs.forEach(blog => { %>
+                <section class="card shadow-opacity-50 shadow-primary bg-body rounded hover-lift" style="width: 320px; height: 380px;">
+                    <img src="/uploads/<%- blog.coverImgURL %>" class="card-img-top img-thumbnail" 
+                        alt="Cover Image"
+                        style="height: 65%; object-fit: cover; object-position: center;">
+                    <div class="card-body">
+                        <h4 class="card-title"><%= blog.title %></h4>
+                        <!-- <p class="card-text">blog.description</p> -->
+                        <a href="/blog/<%= blog._id %>" class="btn-solid theme-primary mt-2">View Blog</a>
+                    </div>
+                </section>
+            <% }) %>
+        <% } %>
+    </div>
     
     <%- include("./partials/scripts") %>
 </html> 
