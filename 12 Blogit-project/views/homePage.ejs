@@ -30,10 +30,10 @@
         </div>
     </main>
 
-    <div class="container blogs-container mt-8 mb-12 d-flex flex-wrap gap-6 justify-content-start">
-        <% if (locals.blogs) { %>
+    <% if (locals.blogs) { %>
+        <section class="container blogs-container mt-8 mb-12 d-flex flex-wrap gap-6 justify-content-center">
             <% blogs.forEach(blog => { %>
-                <section class="card shadow-opacity-50 shadow-primary bg-body rounded hover-lift" style="width: 320px; height: 380px;">
+                <div class="card shadow-opacity-50 shadow-primary bg-body rounded hover-lift" style="width: 320px; height: 380px;">
                     <img src="/uploads/<%- blog.coverImgURL %>" class="card-img-top img-thumbnail" 
                         alt="Cover Image"
                         style="height: 65%; object-fit: cover; object-position: center;">
@@ -42,10 +42,10 @@
                         <!-- <p class="card-text">blog.description</p> -->
                         <a href="/blog/<%= blog._id %>" class="btn-solid theme-primary mt-2">View Blog</a>
                     </div>
-                </section>
+                </div>
             <% }) %>
-        <% } %>
-    </div>
+        </section>
+    <% } %>
     
     <%- include("./partials/scripts") %>
 </html> 

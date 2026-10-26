@@ -4,6 +4,7 @@ const { Blog } = require("../models/blog")
 const { getReadableFullDate } = require("../services/utilities")
 const User = require("../models/user")
 const { restrictToSignedInUsersOnly } = require("../middlewares/authentication")
+const { Comment } = require("../models/comment")
 
 const router = express.Router()
 
@@ -31,11 +32,14 @@ router.get("/:blogId", async (req, res) => {
     const blogId = req.params.blogId
 
     const blog = await Blog.findOne({_id: blogId}).populate("author")
-    console.log(blog)
+    const comments = await Comment.find({blogId: blogId}).populate("createdBy")
+    console.log("Blog", blog)
+    console.log("Comments", comments)
 
     return res.render("blogPage", {
         user: req.user,
         blog,
+        comments,
         getReadableFullDate
     })
 })
@@ -57,6 +61,18 @@ router.post("/add-new", restrictToSignedInUsersOnly, upload.single("coverImg"), 
         console.log(err)
         return res.render("homePage", {error: err.message})
     }
+})
+
+// For adding Comments
+router.post("/comment/:blogId", async (req, res) => {
+    const blogId = req.params.blogId
+    const comment = await Comment.create({
+        content: req.body.content,
+        blogId: blogId,
+        createdBy: req.user._id,
+    })
+    console.log("Single-Comment:", comment)
+    res.redirect(`/blog/${blogId}`)
 })
 
 module.exports = router

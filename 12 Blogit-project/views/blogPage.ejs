@@ -12,38 +12,66 @@
         error: locals.error? error : null
     }) %>
     
-    <div class="container mt-4 d-flex gap-4 justify-content-center flex-wrap">
-        <a href="/">
-            <button type="button" class="h-fit theme-primary btn-solid btn-styled">
-                Go Back
-            </button>    
-        </a>
-        <div class="w-75 card mb-6">
-            <img src="/uploads/<%- blog.coverImgURL %>" cl  ass="card-img-top"
-                style="height: 400px; object-fit: contain; object-position: center;"
-                alt="Cover Image">
-            <div class="card-body">
-                <div class="card-title mb-3 d-flex gap-2 justify-content-between">
-                    <h4 class="title mb-1 align-self-end"><%- blog.title %></h4>
-                    <div class="author-avatar d-flex gap-2 flex-wrap">
-                        <span class="author mb-1 fg-secondary fs-md fst-italic align-self-end">
-                            Author: <%- blog?.author?.fullName %>
-                        </span>
-                        <span class="avatar" style="--bs-avatar-size: 3rem;">
-                            <img class="avatar-img" src="<%- blog.author.profileImgURL %>" alt="avatar img">
-                            <% if (locals.user) { %>
-                                <% if (user._id.toString() === blog.author._id.toString()) { %>
-                                    <span class="avatar-status status-online" role="img" aria-label="Online"></span>
-                                <% } %>
-                            <% }%>
-                        </span>
+    <main class="container">
+        <section class="mt-4 d-flex gap-4 justify-content-center flex-wrap">
+            <a href="/">
+                <button type="button" class="h-fit theme-primary btn-solid btn-styled">
+                    Go Back
+                </button>    
+            </a>
+            <div class="w-75 card mb-6">
+                <img src="/uploads/<%- blog.coverImgURL %>" cl  ass="card-img-top"
+                    style="height: 400px; object-fit: contain; object-position: center;"
+                    alt="Cover Image">
+                <div class="card-body">
+                    <div class="card-title mb-3 d-flex gap-2 justify-content-between flex-wrap">
+                        <h4 class="title mb-1 align-self-end"><%- blog.title %></h4>
+                        <div class="author-avatar d-flex gap-2 flex-wrap">
+                            <span class="avatar" style="--bs-avatar-size: 3rem;">
+                                <img class="avatar-img" src="<%- blog.author.profileImgURL %>" alt="avatar img">
+                                <% if (locals.user) { %>
+                                    <% if (user._id.toString() === blog.author._id.toString()) { %>
+                                        <span class="avatar-status status-online" role="img" aria-label="Online"></span>
+                                    <% } %>
+                                <% }%>
+                            </span>
+                            <span class="author mb-1 fg-secondary fs-md fst-italic align-self-end">
+                                <%- blog?.author?.fullName %>
+                            </span>
+                        </div>
                     </div>
+                    <pre class="card-text fg-white px-2" style="white-space: pre-wrap; overflow-wrap: anywhere;"><%- blog.description %></pre>
+                    <p class="card-date mt-3"><small class="fg-2">Uploaded - <%= getReadableFullDate(blog.createdAt) %></small></p>
                 </div>
-                <pre class="card-text fg-white px-2" style="white-space: pre-wrap; overflow-wrap: anywhere;"><%- blog.description %></pre>
-                <p class="card-date mt-3"><small class="fg-2">Uploaded - <%= getReadableFullDate(blog.createdAt) %></small></p>
+
+                <section class="mt-4 mx-4">
+                    <h2 class="mb-5">Comments (<%- locals.comments? comments.length : "0" %>)</h2>
+                    
+                    <% if (locals.user) { %> 
+                        <!-- Commnet form -->
+                        <form action="/blog/comment/<%= blog._id %>" method="POST">
+                             <div class="mb-3">
+                                <input type="text" name="content" class="form-control" placeholder="Entet your Comment" required>
+                            </div>
+                            <button type="submit" class="btn-solid theme-primary mb-6">Comment</button>
+                        </form>
+                    <% } %>   
+
+                    <% locals?.comments?.forEach(comment => { %>
+                        <div class="comment d-flex flex-column gap-2 mb-3">
+                            <div>
+                                <span class="avatar" style="--bs-avatar-size: 3rem;">
+                                    <img class="avatar-img" src="<%= comment.createdBy.profileImgURL %>" alt="avatar img">
+                                </span>
+                                <span><%= comment.createdBy.fullName %></span>
+                            </div>
+                            <div class="mx-5"><%= comment.content %></div>
+                        </div>
+                    <% }) %>
+                </section>
             </div>
-        </div>
-    </div>
+        </section>
+    </main>
 
     <%- include("./partials/scripts") %>
 </body>
