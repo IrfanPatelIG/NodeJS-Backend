@@ -1,0 +1,13 @@
+const express = require("express")
+
+
+const app = express()
+const PORT = 5000
+
+app.get("/", (req, res) => {
+    res.json({ msg: "Server is live"})
+})
+
+app.listen(PORT, () => {
+    console.log(`Server is running: http://localhost:${PORT}`)
+})
