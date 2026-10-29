@@ -9,7 +9,12 @@ const io = new Server(server);
 
 // Socket.io basic Connection
 io.on("connection", (socket) => {
-    console.log("A new use has connected:", socket.id);
+    console.log("A new user has connected:", socket.id);
+
+    socket.on("user-message", (message) => {
+        console.log("User:", message);
+        socket.emit("server-message", (message + ", from server!"))
+    })
 })
 
 const PORT = 5000;

@@ -4,8 +4,38 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chat App</title>
+    <style>
+        body {
+            background-color: black;
+            color: white;
+        }
+    </style>
 </head>
 <body>
     <h1>My Chatting App</h1>
+
+    <input type="text" id="messageInput" placeholder="Enter message">
+    <button id="sendBtn">Send</button>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const socket = io();
+        const sendBtn = document.getElementById("sendBtn");
+        const messageInput = document.getElementById("messageInput");
+
+        // Accepting messages from the Server
+        socket.on("server-message", (message) => {
+            console.log("Server:", message)
+        })
+
+        // Sending message to the Server
+        sendBtn.addEventListener("click", (e) => {
+            const message = messageInput.value;
+            console.log("User:", message);
+            
+            socket.emit("user-message", message)
+            messageInput.value = "";
+        })
+    </script>
 </body>
 </html>
