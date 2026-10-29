@@ -13,7 +13,7 @@ io.on("connection", (socket) => {
 
     socket.on("user-message", (message) => {
         console.log("User:", message);
-        socket.emit("server-message", (message + ", from server!"))
+        io.emit("server-message", message)
     })
 })
 
